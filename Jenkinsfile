@@ -25,19 +25,15 @@ pipeline {
     stage('Building image') {
       steps{
         script {
-          sh "docker build -t ${ImageName}:${imageTag} ."
+          sh "docker build -t ${dockerImage}:${imageTag} ."
         }
       }
     }
-    stage('Deploy Image') {
-      steps{
-        script {
-           docker.withRegistry( '', registryCredential ) {
-           sh "docker push ${ImageName}"
-           }
-        }
+    stage('Deploy Image'){
+      withDockerRegistry([credentialsId: "${registryCredential}", url: 'https://index.docker.io/v1/']) {        
+        sh "docker push ${dockerImage}"
       }
-    }
+    } 
     stage('Remove Unused docker image') {
       steps{
         sh "docker rmi $registry:$BUILD_NUMBER"
