@@ -8,19 +8,10 @@ pipeline {
     stage('Cloning Git') {
       steps {
         git 'https://github.com/dsirine/pipeline'
-      }
-    }
-        
-    stage('Install dependencies') {
-      steps {
         sh 'npm install'
+        sh 'npm test'
       }
     }
      
-    stage('Test') {
-      steps {
-         sh 'npm test'
-      }
-    }      
   }
 }
