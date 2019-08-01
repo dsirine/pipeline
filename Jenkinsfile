@@ -5,7 +5,7 @@ pipeline {
     stages {
         stage('Unit Test') {
             steps {
-                git(url: "https://github.com/dsirine/pipeline")
+                git "https://github.com/dsirine/pipeline"
                 sh "npm install"
                 sh "npm test"
             }
