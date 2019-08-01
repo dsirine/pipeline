@@ -2,6 +2,7 @@ pipeline {
   environment {
     registry = "dsirine/docker-test"
     registryCredential = 'dockerhub'
+    dockerImage = ''
   }
   agent any
     
@@ -19,10 +20,23 @@ pipeline {
     stage('Building image') {
       steps{
         script {
-          docker.build registry + ":$BUILD_NUMBER"
+          dockerImage = docker.build registry + ":$BUILD_NUMBER"
         }
       }
     }
-     
+    stage('Deploy Image') {
+      steps{
+        script {
+          docker.withRegistry( '', registryCredential ) {
+            dockerImage.push()
+          }
+        }
+      }
+    }
+    stage('Remove Unused docker image') {
+      steps{
+        sh "docker rmi $registry:$BUILD_NUMBER"
+      }
+    }     
   }
 }
