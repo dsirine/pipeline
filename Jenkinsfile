@@ -33,7 +33,7 @@ pipeline {
       steps{
         script {
            docker.withRegistry( '', registryCredential ) {
-           dockerImage.push()
+           sh "docker push ${ImageName}"
            }
         }
       }
