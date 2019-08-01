@@ -5,7 +5,7 @@ pipeline {
     stages {
         stage('Unit Test') {
             steps {
-                git "https://github.com/dsirine/pipeline"
+                git(url: "https://github.com/dsirine/pipeline.git", branch: "${ghprbSourceBranch}")
                 sh "npm install"
                 sh "npm test"
             }
