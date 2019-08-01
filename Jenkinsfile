@@ -5,16 +5,10 @@ pipeline {
     dockerImage = ''
   }
   agent any
-    
-  tools {nodejs "node"}
-    
   stages {
-        
     stage('Cloning Git') {
       steps {
-        git 'https://github.com/dsirine/pipeline'
-        sh 'npm install'
-        sh 'npm test'
+        git 'https://github.com/dsirine/pipeline.git'
       }
     }
     stage('Building image') {
@@ -37,6 +31,6 @@ pipeline {
       steps{
         sh "docker rmi $registry:$BUILD_NUMBER"
       }
-    }     
+    }
   }
 }
