@@ -8,7 +8,7 @@ node {
     def registryCredential = 'dockerhub'
 	
 	stage('Git') {
-		git 'https://github.com/dsirine/pipelined'
+		git 'https://github.com/dsirine/pipeline'
 	}
 	stage('Build') {
 		sh 'npm install'
