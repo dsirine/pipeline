@@ -1,27 +1,46 @@
-node{
-  def Namespace = "default"
-  def ImageName = "dsirine/docker-test"
-  def Creds	= "dockerhub"
-  try{
-    stage('Checkout'){
-      git(url: "https://github.com/dsirine/pipeline.git")
-    } 
-    stage('RUN Unit Tests'){
-      sh "npm install"
-      sh "npm test"
-    }
-    stage('Docker Build') {
-      sh "docker build -t ${ImageName}:${imageTag} ."
-    }
-    stage('Scan docker image') {
-      aquaMicroscanner imageName: "${ImageName}:${imageTag}", notCompliesCmd: 'exit 1', onDisallowed: 'fail'
-    }
-    stage('Docker Build, Push'){
-      withDockerRegistry([credentialsId: "${Creds}", url: 'https://index.docker.io/v1/']) {        
-        sh "docker push ${ImageName}"
-      }
-    }    
-  } catch (err) {
-    currentBuild.result = 'FAILURE'
+pipeline {
+  environment {
+    registry = "dsirine/docker-test"
+    registryCredential = 'dockerhub'
+    dockerImage = ''
   }
-}
+  agent any
+  tools {nodejs "node" }
+  stages {
+    stage('Cloning Git') {
+      steps {
+        git 'https://github.com/dsirine/pipeline'
+      }
+    }
+    stage('Build') {
+       steps {
+         sh 'npm install'
+       }
+    }
+    stage('Test') {
+      steps {
+        sh 'npm test'
+      }
+    }
+    stage('Building image') {
+      steps{
+        script {
+          dockerImage = docker.build registry + ":$BUILD_NUMBER"
+        }
+      }
+    }
+    stage('Deploy Image') {
+      steps{
+         script {
+            docker.withRegistry( '', registryCredential ) {
+            dockerImage.push()
+          }
+        }
+      }
+    }
+    stage('Remove Unused docker image') {
+      steps{
+        sh "docker rmi $registry:$BUILD_NUMBER"
+      }
+    }
+  }
