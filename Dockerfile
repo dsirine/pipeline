@@ -1,18 +1,16 @@
-FROM node:alpine
+FROM node
 
-# Create app directory
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
+RUN apt-get update && apt-get upgrade -y \
+    && apt-get clean
 
-# Install app dependencies
-COPY package.json /usr/src/app/
-RUN npm install --production
-RUN npm install pm2 -g
-# Copy app
-COPY . /usr/src/app
+RUN mkdir /app
+WORKDIR /app
 
+COPY package.json /app/
+RUN npm install --only=production
 
-# Expose for api
-EXPOSE 3009
+COPY src /app/src
 
-CMD [ "pm2-docker", "start", "pm2.json"]
+EXPOSE 3000
+
+CMD [ "npm", "start" ]
