@@ -9,7 +9,7 @@ WORKDIR /app
 COPY package.json /app/
 RUN npm install --only=production
 
-COPY /app  /app
+COPY . /app 
 
 EXPOSE 3000
 
