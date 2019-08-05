@@ -9,7 +9,7 @@ pipeline {
   stages {
     stage('Cloning Git') {
       steps {
-        git 'https://github.com/dsirine/pipeline'
+        git(url: 'https://github.com/dsirine/pipeline', branch: "${ghprbSourceBranch}")
       }
     }
     stage('Build') {
