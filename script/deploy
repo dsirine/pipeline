@@ -1,5 +1,5 @@
 #!/bin/sh
-ssh sirine@167.71.91.125 <<EOF
+ssh sirine@35.241.166.127 <<EOF
  cd ~/node-app
  git pull
  npm install -production
