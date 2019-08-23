@@ -1,6 +1,6 @@
 pipeline {
   environment {
-    registry = "dsirine/docker-test"
+    registry = "dsirine/docker-pipeline"
     registryCredential = 'dockerhub'
     dockerImage = ''
   }
@@ -9,7 +9,7 @@ pipeline {
   stages {
     stage('Cloning Git') {
       steps {
-        git(url: 'https://github.com/dsirine/pipeline', branch: "${ghprbSourceBranch}")
+        git 'https://github.com/dsirine/pipeline.git'
       }
     }
     stage('Build') {
