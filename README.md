@@ -1,2 +1,2 @@
 # pipeline
-#Testing 3
+#Jenkins Building Docker Image and Sending to Registry
