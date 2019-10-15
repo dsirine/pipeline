@@ -1,6 +1,6 @@
 pipeline {
   environment {
-    registry = "dsirine/docker-pipeline"
+    registry = "dsirine/capstone"
     registryCredential = 'dockerhub'
     dockerImage = ''
   }
